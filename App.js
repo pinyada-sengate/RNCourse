@@ -8,22 +8,27 @@ export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
   const [modalIsInVisible, setModalIsInVisible] = useState(false);
 
+  function startAddGoalHandler() {
+    setModalIsInVisible(true);
+  }
+
+  function endAddGoalHandler() {
+    setModalIsInVisible(false);
+  }
+
   function addGoalHandler(enteredGoalText) {
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
       { text: enteredGoalText, id: Math.random().toString() },
       //{ text: enteredGoalText, key: Math.random().toString() },
     ]);
+    endAddGoalHandler();
   }
 
   function deleteGoalHandler(id) {
     setCourseGoals((currentCourseGoals) => {
       return currentCourseGoals.filter((goal) => goal.id !== id);
     });
-  }
-
-  function startAddGoalHandler() {
-    setModalIsInVisible(true);
   }
 
   return (
@@ -34,7 +39,11 @@ export default function App() {
         onPress={startAddGoalHandler}
       />
       {modalIsInVisible && (
-        <GoalInput visible={modalIsInVisible} onAddGoal={addGoalHandler} />
+        <GoalInput
+          visible={modalIsInVisible}
+          onAddGoal={addGoalHandler}
+          onCancel={endAddGoalHandler}
+        />
       )}
       <View style={styles.goalsContainer}>
         <FlatList
